@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose; // Importe o Schema desestruturando do mongoose
-const Card = require('./Card')
+const Lista = require('./Lista')
 
-const cardSchema = new Schema({
+const listaSchema = new Schema({
     titulo: {
         type: String,
         required: true
@@ -15,4 +15,4 @@ const cardSchema = new Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Card', cardSchema);
+module.exports = mongoose.model('Lista', listaSchema);
