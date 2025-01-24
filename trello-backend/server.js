@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const mongoose = require('mongoose');
 const quadroRoutes = require('./routes/quadroRoutes');
 const authRoutes = require('./routes/authRoutes');
+const listaRoutes = require('./routes/listaRoutes')
 
 
 
@@ -17,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.error(err));
 
 app.use(express.json());
-app.use('/api', authRoutes, quadroRoutes);
+app.use('/api', authRoutes, quadroRoutes, listaRoutes);
 
 
 app.get('/', (req, res) => {
