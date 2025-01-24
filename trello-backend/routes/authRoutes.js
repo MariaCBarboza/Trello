@@ -1,9 +1,9 @@
 const express = require('express');
 const { check } = require('express-validator');
-const authController = require('../service/authService');
-const loginController = require('../service/loginService');
-const changePasswordController  = require('../service/changePasswordService');
-const forgotPasswordController = require('../service/forgotPasswordService');
+const authController = require('../service/auth/authService');
+const loginController = require('../service/auth/loginService');
+const changePasswordController  = require('../service/auth/changePasswordService');
+const forgotPasswordController = require('../service/auth/forgotPasswordService');
 
 
 const router = express.Router();
@@ -18,7 +18,11 @@ router.post(
     ],
     authController.register
 );
-router.post('/login', loginController.login);
+router.post(
+    '/login',  
+    loginController.login
+
+);
 router.post('/forgot-password', forgotPasswordController.forgotPassword);
 router.post('/change-password', changePasswordController.changePassword);
 
