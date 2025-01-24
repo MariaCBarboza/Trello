@@ -32,3 +32,27 @@ exports.pegarQuadros = async(req, res) =>{
     }
 }
 
+exports.atualizarQuadro = async(req, res) =>{
+    try{
+        const {titulo, backgroundColor, textColor, isFavorite} = req.body;
+        const quadroAtualizado = await Quadro.findByIdAndUpdate(
+            req.body.id, { titulo, backgroundColor, textColor, isFavorite},
+            {new : true}
+        );
+        return res.json(quadroAtualizado);
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Erro no servidor'})
+    }
+}
+exports.deletarQuadro = async(req,res) =>{
+    try{
+        const quadroDelete = await Quadro.findByIdAndDelete(req.body.id);
+        if(!quadroDelete){return res.status(404).json({ error: 'Erro ao deletar quadro' });}
+        return res.json({ message: 'Quadro deletado com sucesso' }) ;
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Erro no servidor' });
+    }
+}
+
