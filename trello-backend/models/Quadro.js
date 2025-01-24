@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose; // Importe o Schema desestruturando do mongoose
+const Lista = require('./Lista')
 
 const quadroSchema = new Schema({
     titulo: {
@@ -22,7 +23,11 @@ const quadroSchema = new Schema({
         type: Schema.Types.ObjectId, // Agora funciona corretamente
         ref: 'User',
         required: true
-    }
+    },
+    listas: [{
+        type: Schema.Types.ObjectId, ref: 'Lista',
+        default: null,
+    }]
 }, {
     timestamps: true
 });
