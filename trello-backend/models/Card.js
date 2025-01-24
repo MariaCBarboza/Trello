@@ -6,6 +6,14 @@ const cardSchema = new Schema({
         type: String,
         required: true
     },
+    dataCriacao: {
+        type: Date,
+        default: Date.now,
+    },
+    dataAtualizacao: {
+        type: Date,
+        default: Date.now,
+    },
 }, {
     timestamps: true
 });

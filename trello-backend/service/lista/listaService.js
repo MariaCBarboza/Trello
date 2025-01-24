@@ -53,3 +53,17 @@ exports.buscarListas = async(req,res) =>{
         res.status(500).json({ message: 'Erro no servidor'})
     }
 }
+exports.adicionarCard = async(listaId, cardId) =>{
+    try {
+        const lista = await Lista.findById(listaId);
+        if(!lista){
+            throw new Error("Lista não encontrada")
+        }
+        lista.cards.push(cardId)
+        const listaAtualizado = await lista.save();
+        return "Card adicionado com sucesso";
+    } catch (error) {
+        console.error('Erro ao adicionar card a lista:', error);
+        throw error; // Re-lança o erro para o tratamento superior
+    }
+}

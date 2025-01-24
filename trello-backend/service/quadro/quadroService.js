@@ -62,8 +62,7 @@ exports.adicionarLista = async (id, listaId) => { // Ordem corrigida e nome mais
             throw new Error("Quadro não encontrado")
         }
         quadro.listas.push(listaId)
-        const quadroAtualizado = await quadro.save()
-        console.log("teste")
+        const quadroAtualizado = await quadro.save();
 
         return "Lista adicionada com sucesso";
     } catch (error) {
