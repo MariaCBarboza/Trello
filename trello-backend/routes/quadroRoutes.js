@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const quadroService = require('../service/quadroService/quadroService.js');
+const quadroService = require('../service/quadro/quadroService.js');
 const auth = require('../middleware/auth.js');
 
 
@@ -14,6 +14,10 @@ router.post(
         check('titulo',"Titulo é obrigatorio").not().isEmpty(),        
     ],
     quadroService.criarQuadro
+);
+router.get(
+    '/pegarQuadros',
+    quadroService.pegarQuadros
 );
 
 

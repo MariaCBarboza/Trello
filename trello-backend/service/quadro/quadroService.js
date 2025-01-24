@@ -21,3 +21,14 @@ exports.criarQuadro = async(req, res) =>{
     }
 }
 
+exports.pegarQuadros = async(req, res) =>{
+    try
+    {
+        const quadros = await Quadro.find({ owner: req.user.id });
+        res.json(quadros);
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Erro no servidor'})
+    }
+}
+
