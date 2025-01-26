@@ -37,4 +37,21 @@ router.delete(
     cardService.deletarCard
 );
 
+// Anexar PDF
+router.post(
+    '/anexarPDF',
+    upload.single('pdf'), // Middleware para upload de arquivos
+    [
+        check('cardId', 'ID do cartão é obrigatório').not().isEmpty(),
+    ],
+    cardService.anexarPDF
+);
+
+// Visualizar PDFs anexados
+router.get(
+    '/visualizarAnexos/:cardId',
+    cardService.visualizarAnexos
+);
+
+
 module.exports = router;

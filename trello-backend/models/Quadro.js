@@ -24,10 +24,10 @@ const quadroSchema = new Schema({
     }],
     compartilhadoCom: [
         {
-            usuario: { type: Schema.Types.ObjectId, ref: 'User' },
-            permissao: { type: String, enum: ['editar', 'visualizar'], default: 'visualizar' },
+          userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+          permissao: { type: String, enum: ['visualizar', 'editar'], default: 'visualizar' },
         },
-    ],
+      ],
 });
 
 module.exports = mongoose.model('Quadro', quadroSchema);
