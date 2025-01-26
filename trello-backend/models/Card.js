@@ -20,6 +20,7 @@ const cardSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    anexos: [{ type: String }],
 }, {
     timestamps: true,
 });
