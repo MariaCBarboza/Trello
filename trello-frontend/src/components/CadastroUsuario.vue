@@ -29,22 +29,29 @@
     };
     },
     methods: {
-      async registerUser() {
-        this.errorMessage = '';
-        this.successMessage = '';
-        try {
-          const response = await axios.post('http://localhost:5000/api/register', this.user);
-          this.successMessage = response.data.message;
-          this.user = { nome: '', email: '', senha: '' }; // Limpa o formulário após o sucesso
-        } catch (error) {
-          if (error.response && error.response.data) {
-            this.errorMessage = error.response.data.message || 'Erro no cadastro';
-          } else {
-            this.errorMessage = 'Erro ao conectar ao servidor';
-          }
-        }
-      },
-    },
+  async registerUser() {
+    this.errorMessage = '';
+    this.successMessage = '';
+    try {
+      const response = await axios.post('http://localhost:5000/api/register', {
+        nome: this.nome,
+        email: this.email,
+        senha: this.senha,
+      });
+      this.successMessage = response.data.message;
+      this.nome = '';
+      this.email = '';
+      this.senha = ''; // Limpa o formulário após o sucesso
+    } catch (error) {
+      if (error.response && error.response.data) {
+        this.errorMessage = error.response.data.message || 'Erro no cadastro';
+      } else {
+        this.errorMessage = 'Erro ao conectar ao servidor';
+      }
+    }
+  },
+},
+
   };
   </script>
   
