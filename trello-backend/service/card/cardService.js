@@ -1,5 +1,7 @@
 const Card = require('../../models/Card');
 const Lista = require('../../models/Lista');
+const multer = require('multer');
+const path = require('path');
 
 // Criar um cartão
 exports.criarCard = async (req, res) => {
@@ -72,5 +74,62 @@ exports.deletarCard = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Erro ao deletar o card." });
+    }
+};
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/pdf'); // Diretório onde os PDFs serão salvos
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+const upload = multer({ 
+    storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'application/pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Apenas arquivos PDF são permitidos.'));
+        }
+    }
+});
+
+// Anexar PDF a um cartão
+exports.anexarPDF = async (req, res) => {
+    try {
+        const { cardId } = req.body;
+
+        const card = await Card.findById(cardId);
+        if (!card) {
+            return res.status(404).json({ message: "Card não encontrado." });
+        }
+
+        // Adiciona o caminho do PDF ao campo `anexos` no cartão
+        card.anexos.push(req.file.path);
+        await card.save();
+
+        return res.status(200).json({ message: "PDF anexado com sucesso.", card });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao anexar o PDF." });
+    }
+};
+
+// Visualizar PDFs anexados a um cartão
+exports.visualizarAnexos = async (req, res) => {
+    try {
+        const { cardId } = req.params;
+
+        const card = await Card.findById(cardId);
+        if (!card) {
+            return res.status(404).json({ message: "Card não encontrado." });
+        }
+
+        return res.status(200).json({ anexos: card.anexos });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao buscar anexos." });
     }
 };
