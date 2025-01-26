@@ -153,26 +153,73 @@ exports.alternarFavorito = async (req, res) => {
 
 exports.compartilharQuadro = async (req, res) => {
     try {
-        const { quadroId, emailUsuario, permissao } = req.body;
-
-        const quadro = await Quadro.findById(quadroId);
-        if (!quadro) {
-            return res.status(404).json({ message: "Quadro não encontrado." });
-        }
-
-        // Verifica se o usuário existe
-        const usuario = await User.findOne({ email: emailUsuario });
-        if (!usuario) {
-            return res.status(404).json({ message: "Usuário não encontrado." });
-        }
-
-        // Adiciona o usuário à lista de compartilhamento
-        quadro.compartilhadoCom.push({ usuario: usuario._id, permissao });
-        await quadro.save();
-
-        return res.status(200).json({ message: "Quadro compartilhado com sucesso." });
+      const { email, permissao } = req.body;
+      const quadroId = req.params.id;
+  
+      const quadro = await Quadro.findById(quadroId);
+      if (!quadro) {
+        return res.status(404).json({ message: 'Quadro não encontrado' });
+      }
+  
+      if (quadro.owner.toString() !== req.user.id) {
+        return res.status(403).json({ message: 'Você não tem permissão para compartilhar este quadro' });
+      }
+  
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+  
+      // Verifica se o usuário já foi compartilhado com o quadro
+      const usuarioCompartilhado = quadro.compartilhadoCom.find(
+        (share) => share.userId.toString() === user._id.toString()
+      );
+  
+      if (usuarioCompartilhado) {
+        return res.status(400).json({ message: 'Quadro já foi compartilhado com esse usuário' });
+      }
+  
+      // Adiciona o compartilhamento com o novo usuário
+      quadro.compartilhadoCom.push({
+        userId: user._id,
+        permissao,
+      });
+  
+      await quadro.save();
+  
+      return res.status(200).json({ message: 'Quadro compartilhado com sucesso' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Erro ao compartilhar o quadro." });
+      console.error(error);
+      return res.status(500).json({ message: 'Erro ao compartilhar quadro' });
     }
-};
+  };
+
+exports.editarQuadro = async (req, res) => {
+    try {
+      const { titulo, backgroundColor, textColor } = req.body;
+      const quadroId = req.body.id;
+  
+      // Verifica se o quadro existe
+      const quadro = await Quadro.findById(quadroId);
+      if (!quadro) {
+        return res.status(404).json({ message: 'Quadro não encontrado' });
+      }
+  
+      // Verifica se o usuário tem permissão de editar
+      if (quadro.owner.toString() !== req.user.id) {
+        return res.status(403).json({ message: 'Você não tem permissão para editar este quadro' });
+      }
+  
+      // Atualiza o quadro
+      quadro.titulo = titulo;
+      quadro.backgroundColor = backgroundColor;
+      quadro.textColor = textColor;
+  
+      await quadro.save();
+  
+      return res.status(200).json(quadro);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Erro ao editar o quadro' });
+    }
+  };
