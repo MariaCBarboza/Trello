@@ -10,6 +10,13 @@ const listaRoutes = require('./routes/listaRoutes')
 const cardRoutes = require('./routes/cardRoutes')
 
 
+const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:8080', // Permite que o front-end acesse o back-end
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'] // Se você estiver utilizando autenticação com headers
+}));
 
 dotenv.config();
 const app = express();

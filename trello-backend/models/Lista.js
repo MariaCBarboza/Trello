@@ -5,14 +5,21 @@ const Lista = require('./Lista')
 const listaSchema = new Schema({
     titulo: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 100,
+    },
+    quadroId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Quadro',
+        required: true,
     },
     cards: [{
-        type: Schema.Types.ObjectId, ref: 'Card',
-        default: null,
+        type: Schema.Types.ObjectId,
+        ref: 'Card',
     }],
 }, {
-    timestamps: true
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Lista', listaSchema);
+

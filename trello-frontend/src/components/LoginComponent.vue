@@ -18,6 +18,8 @@
   
   <script>
   import axios from 'axios';
+  import { useRouter } from 'vue-router'; 
+
   
   export default {
     name: 'LoginUsuario',
@@ -34,21 +36,26 @@
         this.errorMessage = '';
         this.successMessage = '';
         try {
-         await axios.post('http://localhost:5000/api/login', {
-          email: this.email,
-          senha: this.senha,
-         });
-       this.successMessage = 'Login realizado com sucesso!';
-       this.errorMessage = '';
-       } catch (error) {
-        if (error.response && error.response.data) {
-         this.errorMessage = error.response.data.message || 'Erro no login';
-       } else {
-        this.errorMessage = 'Erro ao conectar ao servidor';
-       }
-       this.successMessage = '';
-}
-
+          const response = await axios.post('http://localhost:5000/api/login', {
+            email: this.email,
+            senha: this.senha,
+          });
+  
+          // Sucesso no login: Armazenar token ou status de autenticação
+          localStorage.setItem('authToken', response.data.token); // Armazenando token no localStorage
+          this.successMessage = 'Login realizado com sucesso!';
+          this.errorMessage = '';
+          
+          // Redirecionar para a página de quadros após login bem-sucedido
+          this.$router.push('/quadros');
+        } catch (error) {
+          if (error.response && error.response.data) {
+            this.errorMessage = error.response.data.message || 'Erro no login';
+          } else {
+            this.errorMessage = 'Erro ao conectar ao servidor';
+          }
+          this.successMessage = '';
+        }
       },
       async forgotPassword() {
         this.errorMessage = '';
@@ -73,6 +80,8 @@
   </script>
   
   <style scoped>
+  /* O estilo permanece o mesmo, sem alterações */
+
   .login-container {
     max-width: 400px;
     margin: 0 auto;
