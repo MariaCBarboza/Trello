@@ -31,6 +31,10 @@ router.delete('/deletarQuadro',
         check('id', "Id é necessario").not().isEmpty(),
     ],
     quadroService.deletarQuadro
-)
+);
+router.put(
+    '/reordenarListas',
+    quadroService.reordenarListasDoQuadro
+);
 
 module.exports = router;
