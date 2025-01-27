@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { Schema } = mongoose; // Importe o Schema desestruturando do mongoose
 
 const cardSchema = new Schema({
     texto: {
         type: String,
-        required: true,
-        maxlength: 255,
-    },
-    listaId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Lista',
-        required: true,
+        required: true
     },
     dataCriacao: {
         type: Date,
@@ -20,8 +14,8 @@ const cardSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    anexos: [{ type: String }],
 }, {
-    timestamps: true,
+    timestamps: true
 });
+
 module.exports = mongoose.model('Card', cardSchema);

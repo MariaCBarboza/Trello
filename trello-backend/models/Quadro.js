@@ -3,32 +3,33 @@ const { Schema } = mongoose; // Importe o Schema desestruturando do mongoose
 const Lista = require('./Lista')
 
 const quadroSchema = new Schema({
-    titulo: { 
-        type: String, 
-        required: true 
+    titulo: {
+        type: String,
+        required: true
     },
-    backgroundColor: { 
-        type: String 
+    backgroundColor: {
+        type: String,
+        default: '#ffffff'
     },
-    textColor: { 
-        type: String 
+    textColor: {
+        type: String,
+        default: '#000000'
     },
-    isFavorite: { type: Boolean, 
-        default: false 
+    isFavorite: {
+        type: Boolean,
+        default: false
     },
-    owner: { type: Schema.Types.ObjectId,
-         ref: 'User', required: true 
-        },
-    listas: [{ type: Schema.Types.ObjectId, 
-        ref: 'Lista' 
-    }],
-    compartilhadoCom: [
-        {
-          userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-          permissao: { type: String, enum: ['visualizar', 'editar'], default: 'visualizar' },
-        },
-      ],
+    owner: {
+        type: Schema.Types.ObjectId, // Agora funciona corretamente
+        ref: 'User',
+        required: true
+    },
+    listas: [{
+        type: Schema.Types.ObjectId, ref: 'Lista',
+        default: null,
+    }]
+}, {
+    timestamps: true
 });
 
-const Quadro = mongoose.model('Quadro', quadroSchema);
-module.exports = Quadro;
+module.exports = mongoose.model('Quadro', quadroSchema);
