@@ -30,4 +30,5 @@ const quadroSchema = new Schema({
       ],
 });
 
-module.exports = mongoose.model('Quadro', quadroSchema);
+const Quadro = mongoose.model('Quadro', quadroSchema);
+module.exports = Quadro;
