@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { Schema } = mongoose; // Importe o Schema desestruturando do mongoose
+const Lista = require('./Lista')
 
 const listaSchema = new Schema({
     titulo: {
@@ -21,3 +22,4 @@ const listaSchema = new Schema({
 });
 
 module.exports = mongoose.model('Lista', listaSchema);
+

@@ -63,5 +63,9 @@ router.post(
     ],
     quadroService.compartilharQuadro
 );
+router.put(
+    '/reordenarListas',
+    quadroService.reordenarListasDoQuadro
+);
 
 module.exports = router;

@@ -6,6 +6,8 @@ const quadroRoutes = require('./routes/quadroRoutes');
 const authRoutes = require('./routes/authRoutes');
 const path = require('path');
 const cors = require('cors');
+const listaRoutes = require('./routes/listaRoutes')
+const cardRoutes = require('./routes/cardRoutes')
 
 
 const app = express();
@@ -17,6 +19,8 @@ app.use(cors({
 }));
 
 dotenv.config();
+const app = express();
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -25,7 +29,7 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.error(err));
 
 app.use(express.json());
-app.use('/api', authRoutes, quadroRoutes);
+app.use('/api', authRoutes, quadroRoutes, listaRoutes, cardRoutes);
 
 
 app.get('/', (req, res) => {

@@ -9,6 +9,7 @@ import Quadro from './components/Quadro.vue';
 
 let isAuthenticated = false;
 
+
 const routes = [
     { path: '/cadastro', component: CadastroUsuario },
     { path: '/login', component: LoginComponent },
@@ -60,6 +61,7 @@ const routes = [
             else next();
         },
     },
+
 ];
 
 const router = createRouter({
@@ -70,5 +72,6 @@ const router = createRouter({
 export function setAuthentication(status) {
     isAuthenticated = status;
 }
+
 
 export default router;

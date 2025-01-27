@@ -100,3 +100,15 @@ exports.deletarLista = async (req, res) => {
         res.status(500).json({ message: "Erro ao deletar a lista." });
     }
 };
+
+exports.buscarListas = async(req,res) =>{
+    try
+    {
+        const listas = await quadroService.resgatarListasDoQuadro(req.body.quadroId);
+        res.json(listas);
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Erro no servidor'})
+    }
+};
+

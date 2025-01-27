@@ -131,7 +131,21 @@ exports.resgatarListasDoQuadro = async(quadroId, res) =>{
     const listas = quadro.listas;
     if(!listas){return res.status(500).json({message: "Erro ao procurar lista"})};
     return listas;
-}
+};
+
+        return res.status(200).json(quadroAtualizado);
+    } catch (error) {
+        console.error('Erro ao reordenar listas:', error);
+        throw error;
+    }
+};
+exports.resgatarListasDoQuadro = async(quadroId, res) =>{
+    const quadro = await Quadro.findById(quadroId);
+    if(!quadro){return res.status(500).json({message: "Quadro não existe"})};
+    const listas = quadro.listas;
+    if(!listas){return res.status(500).json({message: "Erro ao procurar lista"})};
+    return listas;
+};
 exports.alternarFavorito = async (req, res) => {
     try {
         const { quadroId } = req.body;

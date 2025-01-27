@@ -15,7 +15,6 @@ router.post(
     ],
     cardService.criarCard
 );
-
 // Mover um cartão
 router.put(
     '/moverCard',

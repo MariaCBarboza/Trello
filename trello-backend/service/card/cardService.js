@@ -1,3 +1,4 @@
+
 const Card = require('../../models/Card');
 const Lista = require('../../models/Lista');
 const multer = require('multer');
@@ -133,3 +134,4 @@ exports.visualizarAnexos = async (req, res) => {
         res.status(500).json({ message: "Erro ao buscar anexos." });
     }
 };
+

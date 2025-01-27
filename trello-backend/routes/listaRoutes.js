@@ -3,6 +3,7 @@ const { check } = require('express-validator');
 const listaService = require('../service/lista/listaService');
 const auth = require('../middleware/auth');
 
+
 const router = express.Router();
 router.use(auth);
 
@@ -45,5 +46,8 @@ router.delete(
     ],
     listaService.deletarLista
 );
-
+router.get(
+    '/resgatarListas',
+    listaService.buscarListas
+);
 module.exports = router;

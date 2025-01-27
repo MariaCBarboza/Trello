@@ -19,6 +19,7 @@
   <script>
   import axios from 'axios';
   import { useRouter } from 'vue-router'; 
+
   
   export default {
     name: 'LoginUsuario',
@@ -56,7 +57,6 @@
           this.successMessage = '';
         }
       },
-  
       async forgotPassword() {
         this.errorMessage = '';
         this.successMessage = '';
@@ -81,6 +81,7 @@
   
   <style scoped>
   /* O estilo permanece o mesmo, sem alterações */
+
   .login-container {
     max-width: 400px;
     margin: 0 auto;
