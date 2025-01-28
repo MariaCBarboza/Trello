@@ -5,8 +5,8 @@
 
     <!-- Botões para criar nova lista, novo card e excluir o board -->
     <div class="buttons-container">
-        <v-btn color="primary" @click="openListForm">Criar Lista</v-btn>
-        <v-btn color="primary" @click="openCardForm">Criar Card</v-btn>
+        <v-btn color="white" @click="openListForm">+</v-btn>
+        <v-btn color="white" @click="openCardForm">Criar Card</v-btn>
         <v-btn color="secondary" @click="openEditBoardForm">Editar Board</v-btn>
         <v-btn color="error" @click="deleteBoard">Excluir Board</v-btn>
     </div>
@@ -15,13 +15,17 @@
     <div ref="listsContainer" class="lists-container">
       <!-- Cada item do array 'lists' será renderizado com o componente List.vue -->
       <transition-group name="fade" tag="div" class="lists-wrapper">
-        <template v-for="(list) in lists" :key="list._id">
+        <div v-for="(list, index) in lists" :key="list._id" class="list-item">
           <List
             :list="list" 
             :boardId="board._id"
             @listRemoved="handleListRemoved"
           />
-        </template>
+          <div class="list-controls">
+            <v-btn color="primary" @click="moveListUp(index)">↑</v-btn>
+            <v-btn color="primary" @click="moveListDown(index)">↓</v-btn>
+          </div>
+        </div>
       </transition-group>
     </div>
 
@@ -39,9 +43,9 @@
       <formulario-card
         :controlador="controlador"
         :board="board"
+        :list="selectedList"
         @cardCreated="handleCardCreated"
         @close="showCardForm = false"
-        
       />
     </v-dialog>
 
@@ -83,6 +87,7 @@ export default {
     const controlador = criaControlador();
     const listsContainer = ref(null);
     const showEditBoardForm = ref(false);
+    const selectedList = ref(null); // Adicione esta linha
 
     const openEditBoardForm = () => {
       showEditBoardForm.value = true;
@@ -140,7 +145,8 @@ export default {
       showListForm.value = true;
     };
 
-    const openCardForm = () => {
+    const openCardForm = (list) => { // Modifique este método
+      selectedList.value = list;
       controlador.painelFormulario = {
         prepara: formularioCard.methods.prepara.bind({
           controlador,
@@ -151,7 +157,7 @@ export default {
             usuario: '',
             descricao: '',
             quadro: boardId,
-            coluna: '',
+            coluna: list._id, // Passe o ID da lista
             dataInicio: '',
             dataFim: '',
           },
@@ -163,7 +169,7 @@ export default {
         usuario: '',
         descricao: '',
         quadro: boardId,
-        coluna: '',
+        coluna: list._id, // Passe o ID da lista
         dataInicio: '',
         dataFim: '',
       });
@@ -180,10 +186,13 @@ export default {
       loadBoard();
     };
 
-    const onDragEnd = async () => {
+    const onDragEnd = async (event) => {
+      const movedList = lists.value.splice(event.oldIndex, 1)[0];
+      lists.value.splice(event.newIndex, 0, movedList);
+
       for (let i = 0; i < lists.value.length; i++) {
         try {
-          const token = localStorage.getItem('token'); // Obtém o token do localStorage
+          const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
           await api.put(`/api/lists/${lists.value[i]._id}`, {
             position: i,
           }, {
@@ -203,7 +212,7 @@ export default {
 
     const deleteBoard = async () => {
       try {
-        const token = localStorage.getItem('token'); // Obtém o token do localStorage
+        const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
         await api.delete(`/api/boards/${boardId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Passa o token no header
@@ -212,6 +221,39 @@ export default {
         router.push('/boards'); // Redireciona para a lista de boards após a exclusão
       } catch (error) {
         console.error('Erro ao excluir o board:', error);
+      }
+    };
+
+    const moveListUp = async (index) => {
+      if (index === 0) return; // Não faz nada se a lista já estiver no topo
+      const temp = lists.value[index];
+      lists.value[index] = lists.value[index - 1];
+      lists.value[index - 1] = temp;
+      await updateListPositions();
+    };
+
+    const moveListDown = async (index) => {
+      if (index === lists.value.length - 1) return; // Não faz nada se a lista já estiver no final
+      const temp = lists.value[index];
+      lists.value[index] = lists.value[index + 1];
+      lists.value[index + 1] = temp;
+      await updateListPositions();
+    };
+
+    const updateListPositions = async () => {
+      for (let i = 0; i < lists.value.length; i++) {
+        try {
+          const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
+          await api.put(`/api/lists/${lists.value[i]._id}`, {
+            position: i,
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Passa o token no header
+            },
+          });
+        } catch (error) {
+          console.error('Erro ao atualizar posição da lista:', error);
+        }
       }
     };
 
@@ -243,6 +285,9 @@ export default {
       showEditBoardForm,
       openEditBoardForm,
       handleBoardUpdated,
+      selectedList, // Adicione esta linha
+      moveListUp,
+      moveListDown,
     };
   },
 };
@@ -273,13 +318,19 @@ export default {
   gap: 16px;
 }
 
-.list {
+.list-item {
   background-color: #f4f5f7;
   border-radius: 3px;
-  width: 272px;
-  padding: 8px;
+  width: 320px; /* Aumente a largura da lista */
+  padding: 16px; /* Aumente o padding da lista */
   display: flex;
   flex-direction: column;
+}
+
+.list-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
 }
 
 .card {
@@ -288,8 +339,8 @@ export default {
   box-shadow: 0 1px 0 rgba(9,30,66,.25);
   margin-bottom: 8px;
   padding: 16px; /* Aumentar o padding para tornar o card mais quadrado */
-  width: 240px; /* Definir uma largura fixa */
-  height: 240px; /* Definir uma altura fixa */
+  width: 280px; /* Definir uma largura fixa */
+  height: 280px; /* Definir uma altura fixa */
   cursor: pointer;
 }
 

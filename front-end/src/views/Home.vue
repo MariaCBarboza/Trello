@@ -1,7 +1,6 @@
 ﻿<template>
     <div class="home">
       <h1>Bem-vindo ao Trelle</h1>
-      <p>Quero da o cuzin</p>
     </div>
   </template>
   
