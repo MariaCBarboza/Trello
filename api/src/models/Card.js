@@ -10,6 +10,7 @@ const CardSchema = new Schema(
         coluna: String,
         dataInicio: Date,
         dataFim: Date,
+        anexos: [String]
 }
 );
 

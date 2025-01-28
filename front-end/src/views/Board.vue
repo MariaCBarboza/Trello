@@ -21,6 +21,12 @@
             :boardId="board._id"
             @listRemoved="handleListRemoved"
           />
+          <div v-for="card in list.cards" :key="card._id" class="card">
+            <h4>{{ card.nome }}</h4>
+            <p>{{ card.descricao }}</p>
+              <!-- Adicionando PdfAttachments dentro de cada card -->
+              <PdfAttachments :cardId="card._id" />
+           </div>
           <div class="list-controls">
             <v-btn color="primary" @click="moveListUp(index)">↑</v-btn>
             <v-btn color="primary" @click="moveListDown(index)">↓</v-btn>
@@ -71,10 +77,11 @@ import formularioLista from '../../crud/lists/list-form.js';
 import formularioCard from '../../crud/cards/cards-form.js';
 import criaControlador from '../../crud/utils/crud-controller.js';
 import BoardEditForm from '../../crud/boards/board-edit-form.js';
+import PdfAttachments from './Pdf-att.vue';
 
 export default {
   name: 'Board',
-  components: { List, formularioLista, formularioCard, BoardEditForm },
+  components: { List, formularioLista, formularioCard, BoardEditForm, PdfAttachments },
   setup() {
     const route = useRoute();
     const router = useRouter();
