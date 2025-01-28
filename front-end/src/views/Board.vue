@@ -21,6 +21,10 @@
             :boardId="board._id"
             @listRemoved="handleListRemoved"
           />
+          <div class="list-controls">
+            <v-btn color="primary" @click="moveListUp(index)">↑</v-btn>
+            <v-btn color="primary" @click="moveListDown(index)">↓</v-btn>
+          </div>
         </div>
       </transition-group>
     </div>
@@ -223,6 +227,39 @@ export default {
       }
     };
 
+    const moveListUp = async (index) => {
+      if (index === 0) return; // Não faz nada se a lista já estiver no topo
+      const temp = lists.value[index];
+      lists.value[index] = lists.value[index - 1];
+      lists.value[index - 1] = temp;
+      await updateListPositions();
+    };
+
+    const moveListDown = async (index) => {
+      if (index === lists.value.length - 1) return; // Não faz nada se a lista já estiver no final
+      const temp = lists.value[index];
+      lists.value[index] = lists.value[index + 1];
+      lists.value[index + 1] = temp;
+      await updateListPositions();
+    };
+
+    const updateListPositions = async () => {
+      for (let i = 0; i < lists.value.length; i++) {
+        try {
+          const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
+          await api.put(`/api/lists/${lists.value[i]._id}`, {
+            position: i,
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Passa o token no header
+            },
+          });
+        } catch (error) {
+          console.error('Erro ao atualizar posição da lista:', error);
+        }
+      }
+    };
+
     onMounted(() => {
       loadBoard();
 
@@ -253,6 +290,8 @@ export default {
       handleBoardUpdated,
       selectedList, // Adicione esta linha
       handleCardMoved,
+      moveListUp,
+      moveListDown,
     };
   },
 };
@@ -290,6 +329,12 @@ export default {
   padding: 16px; /* Aumente o padding da lista */
   display: flex;
   flex-direction: column;
+}
+
+.list-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
 }
 
 .card {
