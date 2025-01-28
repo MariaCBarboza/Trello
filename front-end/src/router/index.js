@@ -3,7 +3,6 @@ import Auth from '../views/Auth.vue';
 import Home from '../views/Home.vue';
 import Boards from '../views/Boards.vue';
 import Board from '../views/Board.vue';
-import Profile from '../views/Profile.vue';
 import Login from '../components/LoginComponent.vue';
 import Cadastro from '../components/CadastroUsuario.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
@@ -15,7 +14,6 @@ const routes = [
   { path: '/home', name: 'Home', component: Home },
   { path: '/boards', name: 'Boards', component: Boards },
   { path: '/board/:id', name: 'Board', component: Board },
-  { path: '/profile', name: 'Profile', component: Profile },
   { path: '/login', name: 'Login', component: Login, meta: { hideNavbar: true } },
   { path: '/cadastro', name: 'Cadastro', component: Cadastro, meta: { hideNavbar: true } },
   { path: '/forgot-password', name: 'ForgotPassword', component: ForgotPassword },

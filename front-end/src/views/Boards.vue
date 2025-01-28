@@ -10,7 +10,7 @@
         </v-row>
 
         <v-row>
-            <v-col v-for="(board, index) in userBoards"
+            <v-col v-for="(board) in userBoards"
                    :key="board._id"
                    cols="12" sm="6" md="4" lg="3">
                 <v-card class="ma-3 elevation-5"

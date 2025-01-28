@@ -51,7 +51,7 @@ export default {
                 }
 
                 try {
-                    const token = localStorage.getItem("token"); // Certifique-se de que o token está armazenado
+                    const token = localStorage.getItem("authToken"); // Certifique-se de que o token está armazenado
                     const response = await axios.post(
                         "/api/auth/change-password",
                         {

@@ -60,7 +60,7 @@ export default defineComponent({
     async salvaLista() {
         const url = this.list._id ? `http://localhost:4331/api/lists/${this.list._id}` : 'http://localhost:4331/api/lists';
         const method = this.list._id ? 'put' : 'post';
-        const token = localStorage.getItem('token'); // Obtém o token do localStorage
+        const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
         const boardId = this.retornaParametroURL();
         this.list.boardId = boardId;
         console.log(this.list);

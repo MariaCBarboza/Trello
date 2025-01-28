@@ -53,7 +53,7 @@ export default defineComponent({
   `,
   methods: {
     async saveBoard() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const url = `http://localhost:4331/api/boards/${this.boardData._id}`;
       try {
         // Requisição para atualizar o board
