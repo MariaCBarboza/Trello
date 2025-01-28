@@ -64,7 +64,7 @@ export default {
       this.errorMessage = '';
       this.successMessage = '';
       try {
-        const response = await axios.post('http://localhost:5000/api/forgot-password', {
+        const response = await axios.post('http://localhost:4331/api/auth/forgot-password', {
           email: this.email,
         });
         this.successMessage = response.data.message;
