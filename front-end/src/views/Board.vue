@@ -116,6 +116,9 @@ export default {
         console.error('Erro ao carregar dados do quadro:', error);
       }
     };
+    const handleCardMoved = () => {
+      loadBoard();
+    };
 
     const openListForm = () => {
       console.log('Abrindo formulário de criação de lista'); // Log para depuração
@@ -249,6 +252,7 @@ export default {
       openEditBoardForm,
       handleBoardUpdated,
       selectedList, // Adicione esta linha
+      handleCardMoved,
     };
   },
 };

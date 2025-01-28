@@ -44,3 +44,25 @@ export const deleteCard = async (id) => {
 
     return { message: `Card ID ${id} removido com sucesso.` };
 };
+export const moveCard = async (cardId, newColumnId) => {
+    const card = await Card.findById(cardId);
+    if (!card) {
+        throw { status: 404, message: "Card não encontrado." };
+    }
+
+    const oldColumnId = card.coluna;
+
+    console.log(`Movendo card ID ${cardId} de coluna ${oldColumnId} para coluna ${newColumnId}`); // Adicione log
+
+    // Atualizar a coluna do card
+    card.coluna = newColumnId;
+    await card.save();
+
+    // Atualizar listas
+    await List.findByIdAndUpdate(oldColumnId, { $pull: { cards: cardId } });
+    await List.findByIdAndUpdate(newColumnId, { $push: { cards: cardId } });
+
+    console.log(`Card ID ${cardId} movido com sucesso.`); // Adicione log
+    return card;
+};
+

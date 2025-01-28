@@ -41,3 +41,6 @@ export const deleteList = async (id) => {
     await list.deleteOne();
     return { message: 'Lista removida com sucesso' };
 };
+export const getListByTitle = async (boardId, title) => {
+    return await List.findOne({ boardId, title }).populate('cards');
+};
