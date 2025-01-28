@@ -18,19 +18,19 @@ export default defineComponent({
         lists: [],
       },
       colorOptions: [
-        { label: 'Azul Claro', value: '#90caf9' },
-        { label: 'Azul Escuro', value: '#1565c0' },
-        { label: 'Verde Claro', value: '#a5d6a7' },
-        { label: 'Verde Escuro', value: '#2e7d32' },
-        { label: 'Amarelo', value: '#fff59d' },
-        { label: 'Laranja', value: '#ffab91' },
-        { label: 'Cinza Claro', value: '#e0e0e0' },
-        { label: 'Cinza Escuro', value: '#424242' },
+        { title: 'Azul Claro', value: '#90caf9' },
+        { title: 'Azul Escuro', value: '#1565c0' },
+        { title: 'Verde Claro', value: '#a5d6a7' },
+        { title: 'Verde Escuro', value: '#2e7d32' },
+        { title: 'Amarelo', value: '#fff59d' },
+        { title: 'Laranja', value: '#ffab91' },
+        { title: 'Cinza Claro', value: '#e0e0e0' },
+        { title: 'Cinza Escuro', value: '#424242' },
       ],
       textColorOptions: [
-        { label: 'Preto', value: '#000000' },
-        { label: 'Branco', value: '#ffffff' },
-        { label: 'Cinza Escuro', value: '#424242' },
+        { title: 'Preto', value: '#000000' },
+        { title: 'Branco', value: '#ffffff' },
+        { title: 'Cinza Escuro', value: '#424242' },
       ],
     };
   },
@@ -60,16 +60,16 @@ export default defineComponent({
             <v-col cols="12" sm="6">
                 <v-select
                     v-model="board.backgroundColor"
-                    :item-props="true"
                     :items="colorOptions"
                     item-text="label"
                     item-value="value"
                     label="Cor de Fundo"
                     required
-                ></v-select>
-                </v-col>
+                >
+                </v-select>
+              </v-col>
 
-                <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6">
                 <v-select
                     v-model="board.textColor"
                     :items="textColorOptions"
@@ -78,7 +78,7 @@ export default defineComponent({
                     label="Cor do Texto"
                     required
                 ></v-select>
-                </v-col>
+              </v-col>
 
 
             <!-- Checkbox para Favorito -->
@@ -101,6 +101,8 @@ export default defineComponent({
       this.errorMessage = '';
       this.board = { ...this.controlador.itemSelecionado };
       this.titulo = this.board._id === '' ? 'Novo Quadro' : 'Editar Quadro';
+      console.log(this.$data);
+      console.log(this.board)
     },
 
     async salvaBoard() {
