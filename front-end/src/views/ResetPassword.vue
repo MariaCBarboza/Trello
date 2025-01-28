@@ -45,22 +45,35 @@ export default {
   },
   methods: {
     async resetPassword() {
-      this.passwordError = "";
-      this.confirmPasswordError = "";
+    this.passwordError = "";
+    this.confirmPasswordError = "";
 
-      if (!this.password) this.passwordError = "A senha é obrigatória.";
-      if (this.password !== this.confirmPassword) this.confirmPasswordError = "As senhas não coincidem.";
+    // Validação dos campos
+    if (!this.password) {
+        this.passwordError = "A senha é obrigatória.";
+    }
+    if (this.password !== this.confirmPassword) {
+        this.confirmPasswordError = "As senhas não coincidem.";
+    }
 
-      if (this.passwordError || this.confirmPasswordError) return;
+    // Se houver erros, não continua
+    if (this.passwordError || this.confirmPasswordError) return;
 
-      try {
-        const token = this.$route.query.token; // Token enviado no link
-        const response = await axios.post("/api/auth/reset-password", { newPassword: this.password, token });
-        this.message = "Senha redefinida com sucesso!";
-      } catch (error) {
-        this.message = "Erro ao redefinir senha.";
-      }
-    },
+    try {
+        const token = this.$route.query.token;  // Pega o token da URL
+        const response = await axios.post("http://localhost:4331/api/auth/reset-password", { newPassword: this.password, token });
+
+        // Exibe mensagem de sucesso
+        this.message = response.data.message || "Senha redefinida com sucesso!";
+    } catch (error) {
+        // Exibe mensagem de erro detalhada, se possível
+        if (error.response) {
+            this.message = error.response.data.message || "Erro ao redefinir senha.";
+        } else {
+            this.message = "Erro de comunicação com o servidor.";
+        }
+    }
+}
   },
 };
 </script>

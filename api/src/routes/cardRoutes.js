@@ -50,5 +50,19 @@ router.delete('/:id', async (req, res) => {
         res.status(err.status || 500).json({ error: err.message });
     }
 });
+// Mover um card para outra lista
+router.put('/move/:id', async (req, res) => {
+    try {
+        const { newColumnId } = req.body;
+        console.log(`Recebendo solicitação para mover card ID ${req.params.id} para coluna ${newColumnId}`); // Adicione log
+
+        const card = await cardService.moveCard(req.params.id, newColumnId);
+        res.status(200).json(card);
+    } catch (err) {
+        console.error("Erro ao mover o card:", err);
+        res.status(err.status || 500).json({ error: err.message });
+    }
+});
+
 
 export default router;

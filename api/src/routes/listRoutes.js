@@ -49,5 +49,17 @@ router.delete('/:id', async (req, res) => {
         res.status(error.status || 400).json({ error: error.message });
     }
 });
-
+router.get('/board/:boardId/title/:title', async (req, res) => {
+    try {
+        const { boardId, title } = req.params;
+        const list = await listService.getListByTitle(boardId, title);
+        if (!list) {
+            return res.status(404).json({ error: 'Lista não encontrada' });
+        }
+        res.status(200).json(list);
+    } catch (error) {
+        console.error('Erro ao buscar lista pelo título:', error);
+        res.status(500).json({ error: 'Erro ao buscar lista pelo título' });
+    }
+});
 export default router;
