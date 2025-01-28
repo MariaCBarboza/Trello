@@ -73,7 +73,7 @@ export default defineComponent({
     
             const url = this.card._id ? `http://localhost:4331/api/cards/${this.card._id}` : 'http://localhost:4331/api/cards';
             const method = this.card._id ? 'put' : 'post';
-            const token = localStorage.getItem('token'); // Obtém o token do localStorage
+            const token = localStorage.getItem('authToken'); // Obtém o token do localStorage
             
             try {
                 const response = await axios({
