@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import Board from '../models/Board.js';
 import authenticateToken from '../middleware/authenticateToken.js';
-import BoardPermissions from '../models/BoardPermissions.js';
+import * as boardService from '../service/auth/boardService.js';
 
 const router = Router();
 
@@ -10,7 +9,7 @@ router.use(authenticateToken);
 
 router.get('/', async (req, res) => {
     try {
-        const boards = await Board.find().populate('lists');
+        const boards = await boardService.getAllBoards();
         res.json(boards);
     } catch (error) {
         console.error("Erro ao buscar os boards:", error);
@@ -20,49 +19,18 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const board = await Board.findById(req.params.id).populate('lists');
-
-        if (!board) {
-            return res.status(404).json({ error: 'Board não encontrado.' });
-        }
-
-        // Verificar se o usuário tem permissão para acessar o quadro
-        if (board.owner.toString() !== req.user.id) {
-            const permission = await BoardPermissions.findOne({ board: board._id, user: req.user.id });
-            if (!permission) {
-                return res.status(403).json({ error: 'Acesso negado.' });
-            }
-        }
-
+        const board = await boardService.getBoardById(req.params.id, req.user.id);
         res.json(board);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar board.' });
+        console.error("Erro ao buscar board:", error);
+        res.status(error.status || 500).json({ error: error.message });
     }
 });
 
 router.post('/', async (req, res) => {
     try {
-        const { title, backgroundColor, textColor, isFavorite, lists } = req.body;
-        const owner = req.user.id; // Usuário autenticado como dono do quadro
-
-        // Criar o quadro
-        const newBoard = await Board.create({
-            title,
-            backgroundColor,
-            textColor,
-            isFavorite,
-            owner,
-            lists,
-        });
-
-        // Criar a permissão para o dono do quadro
-        await BoardPermissions.create({
-            board: newBoard._id,
-            user: owner,
-            canEdit: true, // O dono sempre pode editar
-        });
-
-        return res.status(201).json(newBoard);
+        const newBoard = await boardService.createBoard(req.body, req.user.id);
+        res.status(201).json(newBoard);
     } catch (error) {
         console.error('Erro ao criar board:', error);
         res.status(500).json({ error: 'Erro ao criar board' });
@@ -71,30 +39,21 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const { title, backgroundColor, textColor, isFavorite, lists } = req.body;
-        const updatedBoard = await Board.findByIdAndUpdate(
-            req.params.id,
-            { title, backgroundColor, textColor, isFavorite, lists },
-            { new: true }
-        ).populate('lists');
-        if (!updatedBoard) {
-            return res.status(404).json({ error: 'Board não encontrado' });
-        }
-        return res.json(updatedBoard);
+        const updatedBoard = await boardService.updateBoard(req.params.id, req.body);
+        res.json(updatedBoard);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao atualizar board' });
+        console.error('Erro ao atualizar board:', error);
+        res.status(error.status || 500).json({ error: error.message });
     }
 });
 
 router.delete('/:id', async (req, res) => {
     try {
-        const board = await Board.findByIdAndDelete(req.params.id);
-        if (!board) {
-            return res.status(404).json({ error: 'Board não encontrado' });
-        }
-        return res.json({ message: 'Board removido com sucesso' });
+        const message = await boardService.deleteBoard(req.params.id);
+        res.json(message);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao remover board' });
+        console.error('Erro ao remover board:', error);
+        res.status(error.status || 500).json({ error: error.message });
     }
 });
 
