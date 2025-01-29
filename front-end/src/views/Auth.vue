@@ -1,11 +1,11 @@
 <template>
-    <div id="home">
-      <nav>
-        <router-link to="/cadastro">Cadastro</router-link>
-        <router-link to="/login">Login</router-link>
-      </nav>
-      <router-view></router-view>
-    </div>
+  <div id="home">
+    <nav>
+      <router-link to="/cadastro" class="nav-button">Cadastro</router-link>
+      <router-link to="/login" class="nav-button">Login</router-link>
+    </nav>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -21,27 +21,31 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  font-family: 'Arial', sans-serif;
 }
 
 nav {
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  margin-bottom: 40px;
 }
 
-nav a {
-  padding: 30px 50px;
-  background-color: #007bff;
+.nav-button {
+  padding: 15px 40px;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  border-radius: 4px;
+  border-radius: 8px;
   text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
   text-align: center;
-  font-size: x-large;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid white;
 }
 
-nav a:hover {
-  background-color: #0056b3;
+.nav-button:hover {
+  background: white;
+  color: #764ba2;
 }
 </style>

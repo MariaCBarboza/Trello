@@ -11,6 +11,7 @@
       <button type="submit">Login</button>
     </form>
     <button @click="forgotPassword" class="forgot-password">Esqueceu a Senha?</button>
+    <p class="register-link">Não tem uma conta? <router-link to="/cadastro">Cadastre-se</router-link></p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     <p v-if="successMessage" class="success">{{ successMessage }}</p>
   </div>
@@ -44,12 +45,10 @@ export default {
           senha: this.senha,
         });
 
-        // Sucesso no login: Armazenar token ou status de autenticação
-        localStorage.setItem('authToken', response.data.token); // Armazenando token no localStorage
+        localStorage.setItem('authToken', response.data.token);
         this.successMessage = 'Login realizado com sucesso!';
         this.errorMessage = '';
 
-        // Redirecionar para a página de quadros após login bem-sucedido
         this.router.push('/menu');
       } catch (error) {
         if (error.response && error.response.data) {
@@ -156,6 +155,21 @@ button:active {
 
 .forgot-password:hover {
   color: #fdfefe;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
 }
 
 .error {
