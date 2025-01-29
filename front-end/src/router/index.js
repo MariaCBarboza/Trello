@@ -8,6 +8,7 @@ import Cadastro from '../components/CadastroUsuario.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
 import ResetPassword from '../views/ResetPassword.vue';
 import ChangePassword from '../views/ChangePassword.vue';
+import Config from '@/views/Config.vue';
 
 const routes = [
   { path: '/', name: 'Auth', component: Auth, meta: { hideNavbar: true } },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/forgot-password', name: 'ForgotPassword', component: ForgotPassword },
   { path: '/reset-password', name: 'ResetPassword', component: ResetPassword },
   { path: '/change-password', name: 'ChangePassword', component: ChangePassword },
+  { path: '/config', name: 'Config', component: Config}
 ];
 
 const router = createRouter({
