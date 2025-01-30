@@ -1,6 +1,6 @@
 <template>
     <div class="config-container">
-      <h1>Configurações</h1>
+      <h1>Redefinir Senha</h1>
       <form @submit.prevent="changePassword">
         <label for="currentPassword">Senha Atual:</label>
         <input type="password" v-model="currentPassword" id="currentPassword" required />

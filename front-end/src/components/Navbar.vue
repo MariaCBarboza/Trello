@@ -16,7 +16,8 @@ export default {
       pages: [
         { name: 'Home', path: '/home' },
         { name: 'Boards', path: '/boards' },
-        { name: 'Config', path: '/config' }
+        { name: 'Config', path: '/config' },
+        { name: 'Colecao', path: '/colecao'}
       ],
       activePage: 0,
     };
