@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authenticateToken from '../middleware/authenticateToken.js';
 import * as boardService from '../service/auth/boardService.js';
+import { getBoardDetails } from '../service/auth/boardService.js';
 
 const router = Router();
 
@@ -56,5 +57,8 @@ router.delete('/:id', async (req, res) => {
         res.status(error.status || 500).json({ error: error.message });
     }
 });
+
+router.get('/boards/:boardId', getBoardDetails);
+
 
 export default router;
