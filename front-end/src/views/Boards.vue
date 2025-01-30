@@ -13,10 +13,16 @@
             <v-col v-for="(board) in userBoards"
                    :key="board._id"
                    cols="12" sm="6" md="4" lg="3">
-                <v-card :style="{backgroundColor: board.backgroundColor}" class="ma-3 elevation-5"
+                <v-card :style="{backgroundColor: board.backgroundColor}"  class="ma-3 elevation-5"
                         @click="openBoard(board._id)">
-                    <v-card-title :style="{color: board.textColor}" class="headline" >{{ board.title }}</v-card-title>
-                </v-card>
+                    <v-card-title :style="{color: board.textColor}" class="headline" >
+                      <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span>{{ board.title }}</span>
+                        <span v-if="board.isFavorite" style="color: #F7F08E;">★</span>
+                      </div>
+                    </v-card-title>
+                
+                  </v-card>
             </v-col>
         </v-row>
 

@@ -10,7 +10,7 @@ router.use(authenticateToken);
 
 router.get('/', async (req, res) => {
     try {
-        const boards = await boardService.getAllBoards();
+        const boards = await boardService.getBoardsByUser(req.user.id);
         res.json(boards);
     } catch (error) {
         console.error("Erro ao buscar os boards:", error);

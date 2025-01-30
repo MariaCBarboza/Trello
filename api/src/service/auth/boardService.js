@@ -23,6 +23,10 @@ export const getBoardById = async (id, userId) => {
     return board;
 };
 
+export const getBoardsByUser = async (userId) => {
+    return await Board.find({ owner: userId }).populate('lists');
+}
+
 export const createBoard = async (data, userId) => {
     const { title, backgroundColor, textColor, isFavorite, lists } = data;
 

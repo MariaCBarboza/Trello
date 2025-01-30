@@ -11,6 +11,21 @@ export default defineComponent({
     return {
       boardData: { ...this.board }, // Cópia dos dados do board
       errorMessage: '',
+      colorOptions: [
+        { title: 'Azul Claro', value: '#90caf9' },
+        { title: 'Azul Escuro', value: '#1565c0' },
+        { title: 'Verde Claro', value: '#a5d6a7' },
+        { title: 'Verde Escuro', value: '#2e7d32' },
+        { title: 'Amarelo', value: '#fff59d' },
+        { title: 'Laranja', value: '#ffab91' },
+        { title: 'Cinza Claro', value: '#e0e0e0' },
+        { title: 'Cinza Escuro', value: '#424242' },
+      ],
+      textColorOptions: [
+        { title: 'Preto', value: '#000000' },
+        { title: 'Branco', value: '#ffffff' },
+        { title: 'Cinza Escuro', value: '#424242' },
+      ],
     };
   },
   template: `
@@ -29,17 +44,24 @@ export default defineComponent({
                 label="Título"
                 required
               ></v-text-field>
-              <v-text-field
+              <v-select
                 v-model="boardData.backgroundColor"
                 label="Cor de Fundo"
-              ></v-text-field>
-              <v-text-field
+                :items = "colorOptions"
+                item-value="value"
+                item-text="title"
+              ></v-select>
+              <v-select
                 v-model="boardData.textColor"
+                :items = "textColorOptions"
+                item-value="value"
+                item-text="title"
                 label="Cor do Texto"
-              ></v-text-field>
+              ></v-select>
               <v-checkbox
                 v-model="boardData.isFavorite"
                 label="Favorito"
+                :style="{backgroundColor: boardData.isFavorite ? 'yellow' : 'transparent', color: 'black'}"
               ></v-checkbox>
             </v-col>
           </v-row>
@@ -79,4 +101,7 @@ export default defineComponent({
       },
     },
   },
-});
+
+  
+}
+);
