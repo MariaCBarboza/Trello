@@ -115,9 +115,10 @@ export default defineComponent({
       url = `http://localhost:4331/api/boardsPermissions/${this.board._id}`
 
       method = 'post'
+      console.log(this.boardShare.user)
       const payload = {
         board: this.board._id,
-        user: this.boardShare.user,
+        userId: this.boardShare.user,
         canEdit: this.boardShare.canEdit
       };
       const response = await axios({
@@ -128,7 +129,8 @@ export default defineComponent({
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("admaofmaomfoa")
+      console.log(response)
+
       this.errorMessage = '';
 
     } catch (error) {

@@ -1,7 +1,7 @@
 <template>
   <div class="body" :style="{backgroundColor : board.backgroundColor}" >
   <div class="board" >
-    <h1 :style="{color: board.textColor}">{{ boardTitle }}</h1>
+    <h1 :style="{color: board.textColor}">{{ boardTitle }}                         <span v-if="board.isFavorite" style="color: #FFFF00;">★</span>    </h1>
     <br>
 
     <!-- Botões para criar nova lista, novo card e excluir o board -->

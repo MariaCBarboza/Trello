@@ -21,7 +21,9 @@ router.get('/:boardId', async (req, res) => {
 // Adicionar uma permissão
 router.post('/:boardId', async (req, res) => {
     try {
+        console.log(req.body);
         const { userId, canEdit } = req.body;
+        console.log('User ID:', userId); // Log do userId
         const board = await Board.findById(req.params.boardId);
 
         // Verificar se o quadro existe

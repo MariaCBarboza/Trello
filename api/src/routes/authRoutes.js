@@ -2,7 +2,6 @@
 import { check } from 'express-validator';
 import { register } from '../service/auth/authService.js';
 import login from '../service/auth/loginService.js';
-import changePassword from '../service/auth/changePasswordService.js';
 import forgotPassword from '../service/auth/forgotPasswordService.js';
 import authenticateToken from '../middleware/authenticateToken.js';
 import jwt from 'jsonwebtoken';

@@ -8,10 +8,10 @@ import cardRoutes from './routes/cardRoutes.js';
 import listRoutes from './routes/listRoutes.js';
 import boardRoutes from './routes/boardRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import BoardPermissions from './models/BoardPermissions.js';
 import userRoutes from './routes/userRoutes.js';
 import pdfRouter from './routes/pdfRoutes.js';
 import colecaoRoutes from './routes/colecaoRoutes.js';
+import BoardPermissionsRoutes from './routes/boardPermissionsRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -42,7 +42,7 @@ app.use('/api/lists', listRoutes);
 app.use('/api/boards', authenticateToken, boardRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/boardsPermissions', authenticateToken, BoardPermissions);
+app.use('/api/boardsPermissions', authenticateToken, BoardPermissionsRoutes);
 app.use('/api/collections', colecaoRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 

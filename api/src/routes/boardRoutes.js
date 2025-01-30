@@ -2,6 +2,8 @@ import { Router } from 'express';
 import authenticateToken from '../middleware/authenticateToken.js';
 import * as boardService from '../service/auth/boardService.js';
 import { getBoardDetails } from '../service/auth/boardService.js';
+import BoardPermissions from '../models/BoardPermissions.js';
+import Board from '../models/Board.js';
 
 const router = Router();
 
@@ -58,6 +60,25 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.get("/getBoardsByBoardPermissions/myBoards", async (req, res) => {
+    console.log(req.user.id)
+        try {
+            const permissions = await BoardPermissions.find({ user: req.user.id });
+            console.log(permissions)
+            let boards = []
+            for (const element of permissions) {
+                const board = await Board.findById(element.board);
+                console.log(board)
+                if (board != null){
+                    boards.push(board)
+                }
+            }
+            console.log(boards)
+            res.json(boards);
+        } catch (error) {
+            console.error(error)
+        }
+    });
 router.get('/boards/:boardId', getBoardDetails);
 
 

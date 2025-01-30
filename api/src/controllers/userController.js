@@ -31,11 +31,11 @@ export async function updateUserProfile(req, res) {
 export async function getUserByEmail(req, res) {
         try {
             const email = req.params;
-            console.log(email)
             const user = await User.findOne({email: email.email});
             if (!user) {
                 return res.status(404).send('Usuário não encontrado');
             }
+            console.log(user)
             res.status(200).json(user);
         } catch (error) {
             res.status(500).json({ message: 'Erro ao coletar usuario', error: error.message });

@@ -18,6 +18,38 @@
                     <v-card-title :style="{color: board.textColor}" class="headline" >
                       <div style="display: flex; justify-content: space-between; width: 100%;">
                         <span>{{ board.title }}</span>
+                        <span v-if="board.isFavorite" style="color: #FFFF00;">★</span>
+                      </div>
+                    </v-card-title>
+                
+                  </v-card>
+            </v-col>
+        </v-row>
+
+        <v-dialog v-model="showBoardForm" max-width="600px">
+            <formulario-board :controlador="controlador"
+                              @boardCreated="handleBoardCreated"
+                              @close="showBoardForm = false" />
+        </v-dialog>
+    </v-container>
+
+    <v-container>
+        <v-row>
+            <v-col cols="12">
+                <h1 class="display-1">Quadros compartilhados</h1>
+                
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col v-for="(board) in sharedBoards"
+                   :key="board._id"
+                   cols="12" sm="6" md="4" lg="3">
+                <v-card :style="{backgroundColor: board.backgroundColor}"  class="ma-3 elevation-5"
+                        @click="openBoard(board._id)">
+                    <v-card-title :style="{color: board.textColor}" class="headline" >
+                      <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span>{{ board.title }}</span>
                         <span v-if="board.isFavorite" style="color: #F7F08E;">★</span>
                       </div>
                     </v-card-title>
@@ -49,7 +81,7 @@ export default {
     const router = useRouter();
     const showBoardForm = ref(false); // Controle de exibição do formulário de board
     const controlador = criaControlador(); // Cria o controlador de boards
-
+    const sharedBoards = ref([]); // Lista de quadros compartilhados
     // Carregar lista de quadros do usuário
     const loadUserBoards = async () => {
       try {
@@ -60,10 +92,38 @@ export default {
           },
         });
         userBoards.value = response.data;
+        console.log('Meus Quadros :', response.data);
+
       } catch (error) {
         console.error('Erro ao carregar quadros do usuário', error);
       }
     };
+
+    const loadSharedBoards = async () => {
+      try {
+        const token = localStorage.getItem('authToken'); 
+        const response = await api.get('/api/boards/getBoardsByBoardPermissions/myBoards', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        for(let x in response.data){
+          if (x in userBoards.value){
+            response.data.pop(x);
+          }
+        }
+
+
+
+        sharedBoards.value = response.data;
+        console.log('Meus Quadros compartilhados :', response.data);
+
+      } catch (error) {
+        console.error('Erro ao carregar quadros do usuário', error);
+      }
+    }
+
 
     // Quando clicamos em um card de board, abrimos a view Board.vue daquele board
     const openBoard = (boardId) => {
@@ -105,6 +165,7 @@ export default {
 
     onMounted(() => {
       loadUserBoards();
+      loadSharedBoards();
     });
 
     return {
@@ -114,6 +175,7 @@ export default {
       showBoardForm,
       controlador,
       handleBoardCreated,
+      sharedBoards
     };
   },
 };
