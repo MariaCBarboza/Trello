@@ -83,7 +83,9 @@ export default defineComponent({
 
             <!-- Checkbox para Favorito -->
             <v-col cols="12">
-              <v-checkbox v-model="board.isFavorite" label="Favorito"></v-checkbox>
+              <v-checkbox v-model="board.isFavorite" label="Favorito" :style="{backgroundColor: board.isFavorite ? 'yellow' : 'transparent', color: 'black'}"
+>
+              </v-checkbox>
             </v-col>
           </v-row>
         </v-container>

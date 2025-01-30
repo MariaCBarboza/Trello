@@ -21,6 +21,7 @@
             :list="list" 
             :boardId="board._id"
             @listRemoved="handleListRemoved"
+            @cardMoved="handleCardMoved"
           />
           
           <div class="list-controls">
@@ -193,6 +194,7 @@ export default {
       showCardForm.value = false;
       loadBoard();
     };
+    
 
     const onDragEnd = async (event) => {
       const movedList = lists.value.splice(event.oldIndex, 1)[0];

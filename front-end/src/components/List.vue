@@ -60,6 +60,7 @@ export default {
       type: String,
       required: true,
     },
+    updateListPositions: Function
   },
   data() {
     return {
@@ -138,8 +139,9 @@ export default {
         // Mover o card para a nova coluna
         await api.put(`/api/cards/move/${cardId}`, { newColumnId });
 
-        // Atualize a lista localmente removendo o card
         this.list.cards = this.list.cards.filter(card => card._id !== cardId);
+        this.$emit('cardMoved', cardId, newColumnId);
+
       } catch (error) {
         console.error('Erro ao mover card:', error);
       }

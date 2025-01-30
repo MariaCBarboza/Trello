@@ -61,6 +61,7 @@ export default defineComponent({
               <v-checkbox
                 v-model="boardData.isFavorite"
                 label="Favorito"
+                :style="{backgroundColor: boardData.isFavorite ? 'yellow' : 'transparent', color: 'black'}"
               ></v-checkbox>
             </v-col>
           </v-row>
@@ -100,4 +101,7 @@ export default defineComponent({
       },
     },
   },
-});
+
+  
+}
+);
