@@ -9,6 +9,7 @@ import ForgotPassword from '../views/ForgotPassword.vue';
 import ResetPassword from '../views/ResetPassword.vue';
 import ChangePassword from '../views/ChangePassword.vue';
 import Config from '@/views/Config.vue';
+import Colecao from '@/views/Colecao.vue';
 
 const routes = [
   { path: '/', name: 'Auth', component: Auth, meta: { hideNavbar: true } },
@@ -20,7 +21,8 @@ const routes = [
   { path: '/forgot-password', name: 'ForgotPassword', component: ForgotPassword },
   { path: '/reset-password', name: 'ResetPassword', component: ResetPassword },
   { path: '/change-password', name: 'ChangePassword', component: ChangePassword },
-  { path: '/config', name: 'Config', component: Config}
+  { path: '/config', name: 'Config', component: Config},
+  { path: '/colecao', name: 'Colecao', component: Colecao}
 ];
 
 const router = createRouter({

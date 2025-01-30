@@ -64,7 +64,10 @@ router.put('/move/:id', async (req, res) => {
         res.status(err.status || 500).json({ error: err.message });
     }
 });
-
-
-
+        res.status(200).json({ message: 'Arquivo anexado com sucesso!', filePath });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao anexar arquivo', error });
+    }
+});  
 export default router;

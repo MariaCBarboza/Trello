@@ -1,14 +1,17 @@
 <template>
-  <div class="board">
-    <h1>{{ boardTitle }}</h1>
+  <div class="body" :style="{backgroundColor : board.backgroundColor}" >
+  <div class="board" >
+    <h1 :style="{color: board.textColor}">{{ boardTitle }}</h1>
     <br>
 
     <!-- Botões para criar nova lista, novo card e excluir o board -->
     <div class="buttons-container">
-        <v-btn color="white" @click="openListForm">+</v-btn>
+        <v-btn color="white" @click="openListForm">Criar Lista</v-btn>
         <v-btn color="white" @click="openCardForm">Criar Card</v-btn>
         <v-btn color="secondary" @click="openEditBoardForm">Editar Board</v-btn>
         <v-btn color="error" @click="deleteBoard">Excluir Board</v-btn>
+        <v-btn color="blue" @click="openShareBoardForm">Compartilhar Board</v-btn>
+
     </div>
 
     <!-- SortableJS: para reordenar as listas -->
@@ -20,13 +23,9 @@
             :list="list" 
             :boardId="board._id"
             @listRemoved="handleListRemoved"
+            @cardMoved="handleCardMoved"
           />
-          <div v-for="card in list.cards" :key="card._id" class="card">
-            <h4>{{ card.nome }}</h4>
-            <p>{{ card.descricao }}</p>
-              <!-- Adicionando PdfAttachments dentro de cada card -->
-              <PdfAttachments :cardId="card._id" />
-           </div>
+          
           <div class="list-controls">
             <v-btn color="primary" @click="moveListUp(index)">↑</v-btn>
             <v-btn color="primary" @click="moveListDown(index)">↓</v-btn>
@@ -54,6 +53,13 @@
         @close="showCardForm = false"
       />
     </v-dialog>
+    <v-dialog v-model="showShareForm" max-width="600px">
+      <compartilharForm
+        :controlador="controlador"
+        :board="board"
+        @close="showShareForm = false"
+      />
+    </v-dialog>
 
     <!-- Modal para formulário de edição do board -->
     <v-dialog v-model="showEditBoardForm" max-width="600px">
@@ -65,6 +71,7 @@
       />
     </v-dialog>
   </div>
+</div>
 </template>
 
 <script>
@@ -78,10 +85,11 @@ import formularioCard from '../../crud/cards/cards-form.js';
 import criaControlador from '../../crud/utils/crud-controller.js';
 import BoardEditForm from '../../crud/boards/board-edit-form.js';
 import PdfAttachments from './Pdf-att.vue';
+import compartilharForm from '../../crud/boards/board-share-form.js';
 
 export default {
   name: 'Board',
-  components: { List, formularioLista, formularioCard, BoardEditForm, PdfAttachments },
+  components: { List, formularioLista, formularioCard, BoardEditForm, PdfAttachments,compartilharForm },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -95,6 +103,7 @@ export default {
     const listsContainer = ref(null);
     const showEditBoardForm = ref(false);
     const selectedList = ref(null); // Adicione esta linha
+    const showShareForm = ref(false);
 
     const openEditBoardForm = () => {
       showEditBoardForm.value = true;
@@ -116,7 +125,8 @@ export default {
         });
         board.value = boardResponse.data;
         boardTitle.value = boardResponse.data.title;
-
+        board.textColor = boardResponse.data.textColor;
+        board.backgroundColor = boardResponse.data.backgroundColor;
         const listsResponse = await api.get(`/api/lists/board/${boardId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Passa o token no header
@@ -139,7 +149,7 @@ export default {
           list: {
             _id: '',
             title: '',
-            boardId: boardId, // Certifique-se de que o boardId está sendo atribuído aqui
+            boardId: boardId,
             position: lists.value.length,
             cards: [],
           },
@@ -148,14 +158,37 @@ export default {
       controlador.insere({
         _id: '',
         title: '',
-        boardId: boardId, // Certifique-se de que o boardId está sendo atribuído aqui
+        boardId: boardId, 
         position: lists.value.length,
         cards: [],
       });
       showListForm.value = true;
     };
+    const openShareBoardForm = () => {
+      console.log('Abrindo formulário de criação de lista'); // Log para depuração
+      controlador.painelFormulario = {
+        prepara: compartilharForm.methods.prepara.bind({
+          controlador,
+          list: {
+            _id: '',
+            title: '',
+            boardId: boardId,
+            position: lists.value.length,
+            cards: [],
+          },
+        }),
+      };
+      controlador.insere({
+        _id: '',
+        title: '',
+        boardId: boardId, 
+        position: lists.value.length,
+        cards: [],
+      });
+      showShareForm.value = true;
+    };
 
-    const openCardForm = (list) => { // Modifique este método
+    const openCardForm = (list) => { 
       selectedList.value = list;
       controlador.painelFormulario = {
         prepara: formularioCard.methods.prepara.bind({
@@ -195,6 +228,7 @@ export default {
       showCardForm.value = false;
       loadBoard();
     };
+    
 
     const onDragEnd = async (event) => {
       const movedList = lists.value.splice(event.oldIndex, 1)[0];
@@ -299,6 +333,8 @@ export default {
       handleCardMoved,
       moveListUp,
       moveListDown,
+      openShareBoardForm,
+      showShareForm
     };
   },
 };
@@ -364,5 +400,10 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+body {
+  width: 100%;
+  height: 100vh; /* 100% da altura da tela */
+  display: flex; /* ou block, grid, etc. */
 }
 </style>

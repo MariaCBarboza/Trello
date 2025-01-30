@@ -11,6 +11,9 @@ import authRoutes from './routes/authRoutes.js';
 import BoardPermissions from './models/BoardPermissions.js';
 import userRoutes from './routes/userRoutes.js';
 import pdfRouter from './routes/pdfRoutes.js';
+import colecaoRoutes from './routes/colecaoRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 
 // Corrigir para obter o __dirname em módulos ES
@@ -40,6 +43,7 @@ app.use('/api/boards', authenticateToken, boardRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/boardsPermissions', authenticateToken, BoardPermissions);
+app.use('/api/collections', colecaoRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 
 export default app;
