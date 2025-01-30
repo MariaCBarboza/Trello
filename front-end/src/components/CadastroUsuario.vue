@@ -13,7 +13,7 @@
 
       <button type="submit">Registrar</button>
     </form>
-    <p v-if="successMessage" class="success">{{ successMessage }} Redirecionando para login...</p>
+    <p v-if="successMessage" class="success">{{ successMessage }}</p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     <p class="login-link">Já tem uma conta? <router-link to="/login">Faça login</router-link></p>
   </div>
@@ -43,7 +43,7 @@ export default {
           email: this.email,
           senha: this.senha,
         });
-        this.successMessage = "Cadastro realizado com sucesso! Redirecionando para login...";
+        this.successMessage = "Cadastro realizado com sucesso! Redirecionando para o Login..." ;
         this.nome = '';
         this.email = '';
         this.senha = '';
