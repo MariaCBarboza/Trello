@@ -10,6 +10,8 @@
         <v-btn color="white" @click="openCardForm">Criar Card</v-btn>
         <v-btn color="secondary" @click="openEditBoardForm">Editar Board</v-btn>
         <v-btn color="error" @click="deleteBoard">Excluir Board</v-btn>
+        <v-btn color="blue" @click="openShareBoardForm">Compartilhar Board</v-btn>
+
     </div>
 
     <!-- SortableJS: para reordenar as listas -->
@@ -51,6 +53,13 @@
         @close="showCardForm = false"
       />
     </v-dialog>
+    <v-dialog v-model="showShareForm" max-width="600px">
+      <compartilharForm
+        :controlador="controlador"
+        :board="board"
+        @close="showShareForm = false"
+      />
+    </v-dialog>
 
     <!-- Modal para formulário de edição do board -->
     <v-dialog v-model="showEditBoardForm" max-width="600px">
@@ -76,10 +85,11 @@ import formularioCard from '../../crud/cards/cards-form.js';
 import criaControlador from '../../crud/utils/crud-controller.js';
 import BoardEditForm from '../../crud/boards/board-edit-form.js';
 import PdfAttachments from './Pdf-att.vue';
+import compartilharForm from '../../crud/boards/board-share-form.js';
 
 export default {
   name: 'Board',
-  components: { List, formularioLista, formularioCard, BoardEditForm, PdfAttachments },
+  components: { List, formularioLista, formularioCard, BoardEditForm, PdfAttachments,compartilharForm },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -93,6 +103,7 @@ export default {
     const listsContainer = ref(null);
     const showEditBoardForm = ref(false);
     const selectedList = ref(null); // Adicione esta linha
+    const showShareForm = ref(false);
 
     const openEditBoardForm = () => {
       showEditBoardForm.value = true;
@@ -152,6 +163,29 @@ export default {
         cards: [],
       });
       showListForm.value = true;
+    };
+    const openShareBoardForm = () => {
+      console.log('Abrindo formulário de criação de lista'); // Log para depuração
+      controlador.painelFormulario = {
+        prepara: compartilharForm.methods.prepara.bind({
+          controlador,
+          list: {
+            _id: '',
+            title: '',
+            boardId: boardId,
+            position: lists.value.length,
+            cards: [],
+          },
+        }),
+      };
+      controlador.insere({
+        _id: '',
+        title: '',
+        boardId: boardId, 
+        position: lists.value.length,
+        cards: [],
+      });
+      showShareForm.value = true;
     };
 
     const openCardForm = (list) => { 
@@ -299,6 +333,8 @@ export default {
       handleCardMoved,
       moveListUp,
       moveListDown,
+      openShareBoardForm,
+      showShareForm
     };
   },
 };

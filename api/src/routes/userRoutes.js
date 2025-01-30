@@ -1,12 +1,15 @@
 import { Router } from 'express';
-import { getUserProfile, updateUserProfile } from '../controllers/userController.js';
+import { getUserByEmail, getUserProfile, updateUserProfile } from '../controllers/userController.js';
 
 const router = Router();
 
-// Rota para obter os dados do usuário
+// Rota para obter os dados do usuï¿½rio
 router.get('/profile', getUserProfile);
 
-// Rota para atualizar os dados do usuário
+// Rota para atualizar os dados do usuï¿½rio
 router.put('/profile', updateUserProfile);
+
+
+router.get("/findByEmail/:email", getUserByEmail)
 
 export default router;
