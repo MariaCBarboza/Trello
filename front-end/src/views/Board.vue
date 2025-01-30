@@ -1,11 +1,12 @@
 <template>
-  <div class="board">
-    <h1>{{ boardTitle }}</h1>
+  <div class="body" :style="{backgroundColor : board.backgroundColor}" >
+  <div class="board" >
+    <h1 :style="{color: board.textColor}">{{ boardTitle }}</h1>
     <br>
 
     <!-- Botões para criar nova lista, novo card e excluir o board -->
     <div class="buttons-container">
-        <v-btn color="white" @click="openListForm">+</v-btn>
+        <v-btn color="white" @click="openListForm">Criar Lista</v-btn>
         <v-btn color="white" @click="openCardForm">Criar Card</v-btn>
         <v-btn color="secondary" @click="openEditBoardForm">Editar Board</v-btn>
         <v-btn color="error" @click="deleteBoard">Excluir Board</v-btn>
@@ -21,12 +22,7 @@
             :boardId="board._id"
             @listRemoved="handleListRemoved"
           />
-          <div v-for="card in list.cards" :key="card._id" class="card">
-            <h4>{{ card.nome }}</h4>
-            <p>{{ card.descricao }}</p>
-              <!-- Adicionando PdfAttachments dentro de cada card -->
-              <PdfAttachments :cardId="card._id" />
-           </div>
+          
           <div class="list-controls">
             <v-btn color="primary" @click="moveListUp(index)">↑</v-btn>
             <v-btn color="primary" @click="moveListDown(index)">↓</v-btn>
@@ -65,6 +61,7 @@
       />
     </v-dialog>
   </div>
+</div>
 </template>
 
 <script>
@@ -116,7 +113,8 @@ export default {
         });
         board.value = boardResponse.data;
         boardTitle.value = boardResponse.data.title;
-
+        board.textColor = boardResponse.data.textColor;
+        board.backgroundColor = boardResponse.data.backgroundColor;
         const listsResponse = await api.get(`/api/lists/board/${boardId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Passa o token no header
@@ -139,7 +137,7 @@ export default {
           list: {
             _id: '',
             title: '',
-            boardId: boardId, // Certifique-se de que o boardId está sendo atribuído aqui
+            boardId: boardId,
             position: lists.value.length,
             cards: [],
           },
@@ -148,14 +146,14 @@ export default {
       controlador.insere({
         _id: '',
         title: '',
-        boardId: boardId, // Certifique-se de que o boardId está sendo atribuído aqui
+        boardId: boardId, 
         position: lists.value.length,
         cards: [],
       });
       showListForm.value = true;
     };
 
-    const openCardForm = (list) => { // Modifique este método
+    const openCardForm = (list) => { 
       selectedList.value = list;
       controlador.painelFormulario = {
         prepara: formularioCard.methods.prepara.bind({
@@ -364,5 +362,10 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+body {
+  width: 100%;
+  height: 100vh; /* 100% da altura da tela */
+  display: flex; /* ou block, grid, etc. */
 }
 </style>

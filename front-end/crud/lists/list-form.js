@@ -38,7 +38,7 @@ export default defineComponent({
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="retornaLista">Cancelar</v-btn>
+                    <v-btn color="blue darken-1" text @click="$emit('close')">Cancelar</v-btn>
                     <v-btn color="blue darken-1" text @click="salvaLista">Salvar</v-btn>
                 </v-card-actions>
             </v-card>

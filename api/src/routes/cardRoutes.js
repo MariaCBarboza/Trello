@@ -149,5 +149,5 @@ router.post('/api/cards/:cardId/attachments', upload.single('file'), async (req,
         console.error(error);
         res.status(500).json({ message: 'Erro ao anexar arquivo', error });
     }
-
+});  
 export default router;

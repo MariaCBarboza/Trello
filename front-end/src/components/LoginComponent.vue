@@ -49,7 +49,7 @@ export default {
         this.successMessage = 'Login realizado com sucesso!';
         this.errorMessage = '';
 
-        this.router.push('/menu');
+        this.router.push('/home');
       } catch (error) {
         if (error.response && error.response.data) {
           this.errorMessage = error.response.data.message || 'Erro no login';

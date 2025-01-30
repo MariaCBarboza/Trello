@@ -14,7 +14,12 @@
     <!-- Exibir os cards da lista -->
     <div class="cards-container">
       <div v-for="card in list.cards" :key="card._id" class="card">
-        <p>{{ card.nome }}</p>
+        <h3>{{ card.nome }}</h3>
+        <p>{{ card.descricao }}</p>
+        <PdfAttachments :cardId="card._id" />
+
+     
+        <br><br>
         <div class="button-group">
         <button class="action-btn delete" @click="deleteCard(card._id)">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="icon">
@@ -34,15 +39,18 @@
     </div>
 
     <!-- Botão para remover a lista -->
-    <button @click="removeList">Remover Lista</button>
+    <v-btn color="error" @click="removeList">Remover Lista</v-btn>
   </div>
 </template>
 
 <script>
 import api from '@/services/api'; // Importando a instância configurada do Axios
-
+import PdfAttachments from '@/views/Pdf-att.vue'; // Importando o componente de anexos em PDF
 export default {
   name: 'List',
+  components: {
+    PdfAttachments, // 🔹 Adicione essa linha
+  },
   props: {
     list: {
       type: Object,

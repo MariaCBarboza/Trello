@@ -19,7 +19,8 @@ export default defineComponent({
                 dataInicio: '',
                 dataFim: ''
             },
-            colunas: this.board.lists.map(list => ({ id: list._id, title: list.title })) // Preenche a lista de colunas com os IDs e títulos das listas do board
+            colunas: this.board.lists.map(list => ({ id: list._id, title: list.title })),
+            hoje : new Date().toISOString().split("T")[0]
         };
     },
 
@@ -41,24 +42,25 @@ export default defineComponent({
                                 :items="colunas"
                                 item-text="title"
                                 item-value="id"
-                                label="Coluna"
+                                label="Lista"
                                 required
                             ></v-select>
-                            <v-text-field v-model="card.dataInicio" label="Data de Início" type="date"></v-text-field>
-                            <v-text-field v-model="card.dataFim" label="Data de Fim" type="date"></v-text-field>
+                            <v-text-field v-model="card.dataInicio" label="Data de Início" :value="hoje" type="date" ></v-text-field>
+                            <v-text-field v-model="card.dataFim" label="Data de Fim" :value="hoje" type="date"></v-text-field>
                         </v-col>
                     </v-row>
                 </v-container>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="retornaLista">Cancelar</v-btn>
+                <v-btn color="blue darken-1" text @click="$emit('close')">Cancelar</v-btn>
                 <v-btn color="blue darken-1" text @click="salvaCard">Salvar</v-btn>
             </v-card-actions>
         </v-card>
     `,
 
     methods: {
+    
         async prepara() {
             this.errorMessage = '';
             this.card = { ...this.controlador.itemSelecionado };
@@ -90,7 +92,6 @@ export default defineComponent({
                 this.errorMessage = error.response?.data?.error || 'Erro ao salvar o card.';
             }
         },
-    
         retornaLista() {
             this.controlador.lista();
         },
