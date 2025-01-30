@@ -30,35 +30,47 @@
     },
     methods: {
       async changePassword() {
-        this.errorMessage = '';
-        this.successMessage = '';
-        
-        const token = localStorage.getItem('authToken'); // Pega o token do localStorage
-        if (!token) {
-          this.errorMessage = 'Token de autenticação não encontrado. Faça login novamente.';
-          return;
+          this.errorMessage = '';
+          this.successMessage = '';
+
+          // Verifica se a nova senha está em branco ou tem menos de 6 caracteres
+          if (!this.newPassword) {
+            this.errorMessage = 'A nova senha não pode estar em branco.';
+            return;
+          }
+
+          if (this.newPassword.length < 6) {
+            this.errorMessage = 'A nova senha deve ter pelo menos 6 caracteres.';
+            return;
+          }
+
+          const token = localStorage.getItem('authToken'); // Pega o token do localStorage
+          if (!token) {
+            this.errorMessage = 'Token de autenticação não encontrado. Faça login novamente.';
+            return;
+          }
+
+          try {
+            await axios.post('http://localhost:4331/api/auth/change-password', {
+              currentPassword: this.currentPassword,
+              newPassword: this.newPassword,
+            }, {
+              headers: {
+                Authorization: `Bearer ${token}` // Adiciona o token no cabeçalho
+              }
+            });
+
+            this.successMessage = 'Senha alterada com sucesso! Você será deslogado...';
+            setTimeout(() => {
+              localStorage.removeItem('authToken');
+              this.$router.push('/login');
+            }, 2000);
+          } catch (error) {
+            this.errorMessage = error.response?.data?.message || 'Erro ao alterar senha';
+          }
         }
 
-        try {
-          await axios.post('http://localhost:4331/api/auth/change-password', {
-            currentPassword: this.currentPassword,
-            newPassword: this.newPassword,
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}` // Adiciona o token no cabeçalho
-            }
-          });
-          
-          this.successMessage = 'Senha alterada com sucesso! Você será deslogado...';
-          setTimeout(() => {
-            localStorage.removeItem('authToken');
-            this.$router.push('/login');
-          }, 2000);
-        } catch (error) {
-          this.errorMessage = error.response?.data?.message || 'Erro ao alterar senha';
-        }
-      }
-    }
+          }
   };
   </script>
   
