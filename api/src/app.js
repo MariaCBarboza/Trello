@@ -10,12 +10,13 @@ import boardRoutes from './routes/boardRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import BoardPermissions from './models/BoardPermissions.js';
 import userRoutes from './routes/userRoutes.js';
+import pdfRouter from './routes/pdfRoutes.js';
 import colecaoRoutes from './routes/colecaoRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url); // Obtém o caminho do arquivo atual
-const __dirname = path.dirname(__filename); // Obtém o diretório do arquivo atual
+
+// Corrigir para obter o __dirname em módulos ES
 
 
 dotenv.config();
@@ -35,7 +36,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/trello-dsw', {
 .catch(err => console.error('MongoDB connection error:', err));
 
 // Rotas
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/pdf', pdfRouter);
+app.use('/uploads', express.static('uploads'));
 app.use('/api/lists', listRoutes);
 app.use('/api/boards', authenticateToken, boardRoutes);
 app.use('/api/cards', cardRoutes);
